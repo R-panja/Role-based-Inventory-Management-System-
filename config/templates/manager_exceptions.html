@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Exceptions</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 50px auto;
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 15px;
+            padding: 8px 14px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .back-btn:hover {
+            background-color: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background-color: #343a40;
+            color: white;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #ddd;
+            transition: background 0.2s ease;
+        }
+
+        tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .badge {
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .approved {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .rejected {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .empty-text {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- 🔙 Go Back Button -->
+<a href="{% url 'sales:sales_manager_dashboard' %}" class="back-btn">⬅ Go Back</a>
+    <h2>⚠️ My Exceptions</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Salesman</th>
+                <th>Exception</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        {% for e in exceptions %}
+            <tr>
+                <td>{{ e.salesman.username }}</td>
+                <td>{{ e.exception }}</td>
+                <td>
+                    <span class="badge
+                        {% if e.status == 'approved' %}approved
+                        {% elif e.status == 'rejected' %}rejected
+                        {% else %}pending{% endif %}">
+                        {{ e.status|title }}
+                    </span>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="3" class="empty-text">No exceptions found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+</body>
+</html>

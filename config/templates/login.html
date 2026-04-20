@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Inventory System</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            overflow: hidden;
+            background: #0f172a;
+        }
+
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card {
+            width: 400px;
+            padding: 30px;
+            border-radius: 20px;
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            color: white;
+        }
+
+        h2 {
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 10px;
+            border: none;
+            outline: none;
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 10px;
+            border: none;
+            background: linear-gradient(135deg, #6366f1, #3b82f6);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        hr {
+            margin: 20px 0;
+            border: 0.5px solid rgba(255,255,255,0.2);
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- 3D Background -->
+<canvas id="bg"></canvas>
+
+<div class="container">
+    <div class="card">
+
+        <h2>Register</h2>
+<form method="POST" action="{% url 'register' %}">
+    {% csrf_token %}
+
+    <input type="text" name="username" placeholder="Username" required>
+
+    <input type="password" name="password" placeholder="Password" required>
+
+    <select name="role" required>
+        <option value="">Select Role</option>
+        <option value="salesman">Salesman</option>
+        <option value="inventory">Inventory Manager</option>
+        <option value="sales_manager">Sales Manager</option>
+    </select>
+
+    <button type="submit">Register</button>
+</form>
+
+        <hr>
+
+        <h2>Login</h2>
+        <form method="POST" action="{% url 'login' %}">
+            {% csrf_token %}
+            <input type="text" name="username" placeholder="Username">
+            <input type="password" name="password" placeholder="Password">
+            <button type="submit">Login</button>
+        </form>
+
+    </div>
+</div>
+
+<!-- Three.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+
+<script>
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+
+    const renderer = new THREE.WebGLRenderer({
+        canvas: document.getElementById('bg'),
+    });
+
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    const particlesGeometry = new THREE.BufferGeometry();
+    const particlesCount = 1000;
+
+    const posArray = new Float32Array(particlesCount * 3);
+
+    for(let i = 0; i < particlesCount * 3; i++) {
+        posArray[i] = (Math.random() - 0.5) * 5;
+    }
+
+    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+    const particlesMaterial = new THREE.PointsMaterial({
+        size: 0.01
+    });
+
+    const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+    scene.add(particlesMesh);
+
+    camera.position.z = 2;
+
+    function animate() {
+        requestAnimationFrame(animate);
+
+        particlesMesh.rotation.y += 0.001;
+        particlesMesh.rotation.x += 0.0005;
+
+        renderer.render(scene, camera);
+    }
+
+    animate();
+
+    window.addEventListener('resize', () => {
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+    });
+</script>
+
+</body>
+</html>

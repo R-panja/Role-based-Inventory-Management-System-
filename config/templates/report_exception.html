@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Report Exception</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 60px auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #2c3e50;
+        }
+
+        textarea {
+            width: 100%;
+            height: 120px;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            resize: none;
+            font-size: 14px;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            background-color: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .btn:hover {
+            background-color: #dc2626;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 15px;
+            text-decoration: none;
+            color: #007bff;
+            font-size: 14px;
+        }
+
+        .back-btn:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- 🔙 Back -->
+    <a href="/dashboard/" class="back-btn">⬅ Go Back</a>
+
+    <h2>⚠️ Report Exception</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <textarea name="exception" placeholder="Describe the issue..." required></textarea>
+
+        <select name="manager">
+            {% for m in managers %}
+                <option value="{{ m.id }}">{{ m.username }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit" class="btn">Submit</button>
+    </form>
+
+</div>
+
+</body>
+</html>

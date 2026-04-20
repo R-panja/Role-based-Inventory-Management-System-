@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <h2 class="mb-4">📦 Inventory Manager Panel</h2>
+
+    <!-- Action Buttons -->
+    <div class="mb-4">
+        <a href="{% url 'sales:inventory_report' %}" class="btn btn-primary me-2">
+            📄 Generate Inventory Report
+        </a>
+        <a href="{% url 'inventory_analytics' %}" class="btn btn-success">
+            📊 Inventory Analytics
+        </a>
+    </div>
+
+    <h3 class="mb-3">Pending Bills</h3>
+
+    <div class="row">
+        {% for bill in bills %}
+        
+        <div class="col-md-6">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+
+                    <h5 class="card-title">🧾 Bill #{{ bill.id }}</h5>
+
+                    <p><strong>Salesman:</strong> {{ bill.salesman.username }}</p>
+                    <p><strong>Total:</strong> <span class="text-success">₹ {{ bill.total_amount }}</span></p>
+
+                    <p>
+                        <strong>Status:</strong>
+                        <span class="badge bg-warning text-dark">
+                            {{ bill.status|title }}
+                        </span>
+                    </p>
+
+                    <hr>
+
+                    <h6>Items:</h6>
+                    <ul class="list-group mb-3">
+                        {% for item in bill.items.all %}
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>{{ item.product.name }}</span>
+                                <span>{{ item.quantity }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+
+                    <!-- Buttons -->
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'sales:approve_bill' bill.id %}" 
+                           class="btn btn-success btn-sm">
+                            ✅ Approve
+                        </a>
+
+                        <a href="{% url 'sales:reject_bill' bill.id %}" 
+                           class="btn btn-danger btn-sm">
+                            ❌ Reject
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        {% empty %}
+            <p class="text-muted">No pending bills</p>
+        {% endfor %}
+    </div>
+
+</div>
+
+{% endblock %}

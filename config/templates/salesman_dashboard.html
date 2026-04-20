@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    .dashboard-container {
+        max-width: 600px;
+        margin: 50px auto;
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        text-align: center;
+    }
+
+    h2 {
+        margin-bottom: 25px;
+        color: #2c3e50;
+    }
+
+    .btn {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        margin: 10px 0;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        text-decoration: none;
+        color: white;
+        transition: 0.2s ease;
+    }
+
+    .btn-create {
+        background-color: #22c55e;
+    }
+
+    .btn-create:hover {
+        background-color: #16a34a;
+    }
+
+    .btn-report {
+        background-color: #ef4444;
+    }
+
+    .btn-report:hover {
+        background-color: #dc2626;
+    }
+</style>
+
+<div class="dashboard-container">
+
+    <h2>💼 Salesman Panel</h2>
+
+    <!-- Create Bill -->
+    <a href="{% url 'sales:create_bill' %}" class="btn btn-create">
+        ➕ Create Bill
+    </a>
+
+    <!-- Report Exception -->
+    <a href="{% url 'sales:report_exception' %}" class="btn btn-report">
+        ⚠️ Report Issue
+    </a>
+
+</div>
+
+{% endblock %}

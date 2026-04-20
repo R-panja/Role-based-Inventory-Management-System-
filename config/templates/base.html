@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>{% block title %}Inventory | Professional Suite{% endblock %}</title>
+    <!-- Google Fonts + Modern Professional CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- GSAP for subtle professional animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f0f2f5;
+            color: #1e293b;
+            line-height: 1.5;
+        }
+
+        /* Professional Dashboard Layout */
+        .dashboard-container {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 2rem 2rem 3rem;
+        }
+
+        /* Header Section */
+        .header-section {
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            gap: 1rem;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 1.25rem;
+        }
+        .title-area h1 {
+            font-size: 1.85rem;
+            font-weight: 700;
+            color: #0f172a;
+            letter-spacing: -0.3px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .title-area h1 i {
+            color: #3b82f6;
+            font-size: 1.8rem;
+        }
+        .title-area p {
+            color: #475569;
+            font-size: 0.9rem;
+            margin-top: 6px;
+        }
+        .stats-row {
+            display: flex;
+            gap: 1.2rem;
+            background: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 60px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .stat-pill {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #334155;
+        }
+        .stat-pill strong {
+            font-size: 1.2rem;
+            color: #1e293b;
+            margin-right: 6px;
+            font-weight: 700;
+        }
+
+        /* Search & Filter Bar - Clean & Functional */
+        .filter-card {
+            background: white;
+            border-radius: 20px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03);
+            border: 1px solid #e9eef3;
+            transition: box-shadow 0.2s;
+        }
+        .search-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+        .input-group {
+            flex: 2;
+            min-width: 200px;
+            position: relative;
+        }
+        .input-group i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 0.7rem 1rem 0.7rem 2.4rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+            background: #ffffff;
+            transition: 0.2s;
+        }
+        .input-group input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+        }
+        .select-group {
+            flex: 1;
+            min-width: 160px;
+        }
+        .select-group select {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            background: white;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background: #3b82f6;
+            border: none;
+            padding: 0.7rem 1.6rem;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .btn-primary:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(59,130,246,0.2);
+        }
+
+        /* Products Grid - Professional Cards */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0 2rem;
+        }
+        .product-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.25s ease;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03);
+            border: 1px solid #eef2f6;
+        }
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -12px rgba(0,0,0,0.08);
+            border-color: #cbdffc;
+        }
+        .card-content {
+            padding: 1.5rem;
+        }
+        .product-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .product-category {
+            font-size: 0.75rem;
+            font-weight: 500;
+            background: #f1f5f9;
+            display: inline-block;
+            padding: 0.2rem 0.7rem;
+            border-radius: 30px;
+            color: #475569;
+        }
+        .product-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0.75rem 0 0.5rem;
+        }
+        .product-price span {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #64748b;
+        }
+        .stock-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 0.8rem;
+            font-size: 0.85rem;
+            color: #475569;
+            border-top: 1px solid #edf2f7;
+            padding-top: 0.9rem;
+        }
+        .stock-badge {
+            background: #e6f7ec;
+            color: #15803d;
+            padding: 0.2rem 0.6rem;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+        .stock-low {
+            background: #fff1f0;
+            color: #b91c1c;
+        }
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 3rem;
+            background: white;
+            border-radius: 28px;
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+
+        /* Child Content Area (Backend injection untouched) */
+        .child-block {
+            margin-top: 2.5rem;
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 0.5rem 0;
+            border: 1px solid #eef2f8;
+        }
+        hr {
+            margin: 1rem 0;
+            border: none;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        /* Professional Animations */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(12px);
+        }
+
+        /* Responsive */
+        @media (max-width: 700px) {
+            .dashboard-container {
+                padding: 1.2rem;
+            }
+            .header-section {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .product-price {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="dashboard-container">
+    <!-- Header: Clean & Data Driven -->
+   <div class="header-section">
+    
+    <!-- LEFT: Title -->
+    <div class="title-area">
+        <h1>
+            <i class="fas fa-boxes"></i> 
+            Inventory Management
+        </h1>
+        <p>Real-time asset tracking • professional dashboard</p>
+    </div>
+
+    <!-- RIGHT: User Panel -->
+    {% if request.user.is_authenticated %}
+    <div class="user-panel">
+        
+        <!-- User Info -->
+        <div class="user-info">
+            <i class="fas fa-user-circle"></i>
+            <span class="username">{{ request.user.username }}</span>
+            <span class="role-badge">
+                {{ request.user.role|title }}
+            </span>
+        </div>
+
+        <!-- Actions -->
+        <div class="user-actions">
+            <a href="{% url 'change_password' %}" class="btn-action light">
+                <i class="fas fa-key"></i>
+                <span>Change Password</span>
+            </a>
+
+            <a href="{% url 'logout' %}" class="btn-action danger">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+
+    </div>
+    {% endif %}
+
+</div>
+
+    <!-- Filter Section: Backend GET method untouched -->
+    <div class="filter-card">
+        <form method="GET" class="search-form">
+            <div class="input-group">
+                <i class="fas fa-search"></i>
+                <input type="text" name="q" placeholder="Search by product name..." value="{{ search_query }}">
+            </div>
+            <div class="select-group">
+                <select name="category">
+                    <option value="">All Categories</option>
+                    {% for cat in categories %}
+                        <option value="{{ cat.id }}"
+                            {% if cat.id|stringformat:"s" == selected_category %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ cat.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn-primary">
+                <i class="fas fa-sliders-h"></i> Apply Filters
+            </button>
+        </form>
+    </div>
+
+    <!-- Products Grid: Professional Card Layout -->
+    <div class="products-grid" id="productsContainer">
+        {% for product in products %}
+            <div class="product-card" data-product-id="{{ product.id }}">
+                <div class="card-content">
+                    <div class="product-title">
+                        {{ product.name }}
+                        <span class="product-category">
+                            <i class="fas fa-tag"></i> {{ product.category.name|default:"Uncategorized" }}
+                        </span>
+                    </div>
+                    <div class="product-price">
+                        ₹ {{ product.price }} <span>INR</span>
+                    </div>
+                    <div class="stock-info">
+                        <i class="fas fa-warehouse" style="color:#3b82f6;"></i>
+                        <span>Available Stock:</span>
+                        {% with stock_qty=product.inventory.quantity|default:"0" %}
+                            <span class="stock-badge {% if stock_qty|stringformat:"s" == "0" %}stock-low{% endif %}">
+                                {{ stock_qty }} units
+                            </span>
+                        {% endwith %}
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="empty-state">
+                <i class="fas fa-inbox" style="font-size: 2rem; opacity: 0.5; margin-bottom: 0.8rem; display: block;"></i>
+                <p>No products match the current filters.</p>
+                <p style="font-size: 0.8rem; margin-top: 6px;">Try adjusting search or category.</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <hr>
+
+    <!-- 🔽 CHILD CONTENT BLOCK - Backend connections fully preserved -->
+    <div class="child-block">
+        {% block content %}
+        <!-- Django child templates will be injected here without any change -->
+        {% endblock %}
+    </div>
+</div>
+
+<script>
+    // Professional GSAP animations (lightweight, smooth, enhances UX without heavy 3D)
+    document.addEventListener('DOMContentLoaded', () => {
+        // Initial fade-in animation for stats and header
+        gsap.fromTo('.header-section', 
+            { opacity: 0, y: -15 },
+            { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }
+        );
+        gsap.fromTo('.filter-card', 
+            { opacity: 0, y: 10 },
+            { opacity: 1, y: 0, duration: 0.5, delay: 0.1, ease: "back.out(0.6)" }
+        );
+        
+        // Animate product cards with staggered fade-up (professional)
+        const cards = document.querySelectorAll('.product-card');
+        if (cards.length > 0) {
+            gsap.fromTo(cards, 
+                { opacity: 0, y: 20 },
+                { 
+                    opacity: 1, 
+                    y: 0, 
+                    duration: 0.45, 
+                    stagger: 0.04, 
+                    ease: "power2.out",
+                    delay: 0.15
+                }
+            );
+        } else {
+            const emptyDiv = document.querySelector('.empty-state');
+            if(emptyDiv) {
+                gsap.fromTo(emptyDiv, { opacity: 0, scale: 0.97 }, { opacity: 1, scale: 1, duration: 0.5 });
+            }
+        }
+        
+        // Hover micro-interactions on product cards (subtle but professional)
+        const productCards = document.querySelectorAll('.product-card');
+        productCards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                gsap.to(card, { 
+                    y: -4, 
+                    duration: 0.2, 
+                    ease: "power1.out",
+                    boxShadow: "0 20px 25px -12px rgba(0,0,0,0.12)"
+                });
+            });
+            card.addEventListener('mouseleave', () => {
+                gsap.to(card, { 
+                    y: 0, 
+                    duration: 0.25, 
+                    ease: "elastic.out(1, 0.4)",
+                    boxShadow: "0 1px 3px rgba(0,0,0,0.04)"
+                });
+            });
+        });
+        
+        // Small animation for stat pills
+        gsap.fromTo('.stat-pill', 
+            { scale: 0.9, opacity: 0 },
+            { scale: 1, opacity: 1, duration: 0.4, stagger: 0.1, delay: 0.2 }
+        );
+        
+        // Optional: subtle focus ring animation for filter button
+        const filterBtn = document.querySelector('.btn-primary');
+        if(filterBtn) {
+            filterBtn.addEventListener('click', function(e) {
+                // Just a micro pulse effect to provide feedback (no backend interference)
+                gsap.to(this, { scale: 0.97, duration: 0.1, yoyo: true, repeat: 1 });
+            });
+        }
+        
+        // Enhance input fields with smooth border animation
+        const inputs = document.querySelectorAll('input, select');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                gsap.to(input, { borderColor: "#3b82f6", duration: 0.2, boxShadow: "0 0 0 2px rgba(59,130,246,0.1)" });
+            });
+            input.addEventListener('blur', () => {
+                gsap.to(input, { borderColor: "#cbd5e1", duration: 0.2, boxShadow: "none" });
+            });
+        });
+    });
+    
+    // MutationObserver to handle dynamic updates (in case of HTMX or subsequent backend reloads)
+    // This ensures that when new products are loaded via Django filtering (full page reload is default, but still robust)
+    // but we keep it for any future dynamic changes while keeping GSAP consistent.
+    const container = document.getElementById('productsContainer');
+    if(container) {
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if(mutation.type === 'childList' && mutation.addedNodes.length) {
+                    const newCards = document.querySelectorAll('.product-card:not(.animated-initial)');
+                    if(newCards.length) {
+                        gsap.fromTo(newCards, 
+                            { opacity: 0, y: 18 },
+                            { opacity: 1, y: 0, duration: 0.4, stagger: 0.03, ease: "power2.out" }
+                        );
+                        newCards.forEach(card => card.classList.add('animated-initial'));
+                        
+                        // Re-attach hover interactions to new cards
+                        newCards.forEach(card => {
+                            card.addEventListener('mouseenter', () => {
+                                gsap.to(card, { y: -4, duration: 0.2, boxShadow: "0 20px 25px -12px rgba(0,0,0,0.12)" });
+                            });
+                            card.addEventListener('mouseleave', () => {
+                                gsap.to(card, { y: 0, duration: 0.25, boxShadow: "0 1px 3px rgba(0,0,0,0.04)" });
+                            });
+                        });
+                    }
+                    // if empty state appears
+                    const emptyDiv = document.querySelector('.empty-state');
+                    if(emptyDiv && !emptyDiv.classList.contains('animated-empty')) {
+                        gsap.fromTo(emptyDiv, { opacity: 0 }, { opacity: 1, duration: 0.4 });
+                        emptyDiv.classList.add('animated-empty');
+                    }
+                }
+            });
+        });
+        observer.observe(container, { childList: true, subtree: false });
+    }
+    
+    // Additional: tooltip-like effect for stat pills (just for finesse)
+    console.log("Professional Inventory UI — Backend connections intact, GSAP animations loaded");
+</script>
+
+<!-- Tiny style addition for cleaner scroll and subtle transitions -->
+<style>
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+        background: #eef2ff;
+        border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #94a3b8;
+        border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: #3b82f6;
+    }
+    .product-card, .btn-primary, input, select {
+        transition: all 0.2s ease;
+    }
+    .child-block {
+        background: #ffffff;
+        border-radius: 24px;
+        padding: 1rem 1.2rem;
+    }
+</style>
+</body>
+</html>
